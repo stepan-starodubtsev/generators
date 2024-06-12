@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,33 +10,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg bg-body-secondary">
-    <div class="container-fluid px-5">
-        <a class="navbar-brand" href="#">Агрегат дизельний ЕСД-10/400М</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="d-flex justify-content-end">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Відомість про рух ПММ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Керування користувачами</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Особистий кабінет</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Вийти з акаунта</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
+<nav th:insert="blocks/navbarAggregate :: #navbar"></nav>
+
 
 <main class="mx-5 mt-3">
     <div class="d-flex flex-column align-items-center align-items-sm-start text-white me-4">
@@ -46,10 +21,10 @@
                 <a href="/" class="nav-link align-middle px-0">Перейти на головну</a>
             </li>
             <li class="nav-item">
-                <a href="/account" class="nav-link align-middle px-0">Детальніше про агрегат </a>
+                <a th:href="'/aggregates/edit/'+${aggregate.getId()}" class="nav-link align-middle px-0">Детальніше про агрегат </a>
             </li>
             <li>
-                <a href="/admin/orders" class="nav-link px-0 align-middle">Календар напрацювань</a>
+                <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
         </ul>
     </div>
@@ -61,10 +36,10 @@
                     Додати робочий лист
                 </button>
             </form>
-            <form action="#" method="post">
+            <form th:action="'/search/workSheet/month/'+${aggregate.getId()}" method="post">
                 <div class="input-group pb-3 border-bottom">
                     <input class="form-control border-end-0 border" type="search" placeholder="Пошук по місяцю"
-                           name="searchedLogin">
+                           name="workSheetMonth">
                     <span class="input-group-append">
                         <button class="btn btn-outline-dark bg-white border-bottom border ms-n5" type='submit'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -80,8 +55,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Робочий лист</th>
-                    <th scope="col">Редагувати</th>
+                    <th scope="col">Переглянути</th>
                     <th scope="col">Видалити</th>
                     <th scope="col">№</th>
                     <th scope="col">Підрозділ</th>
@@ -109,11 +83,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td><a href="">Робочий лист</a></td>
-                    <td><a href="">Редагувати</a></td>
+                <tr th:each="workSheet : ${workSheets}">
+                    <td><a th:href="'/aggregates/workSheets/'+${workSheet.getId()}">Переглянути</a></td>
                     <td>
-                        <a href="">
+                        <a th:href="'/aggregates/workSheets/delete/'+${workSheet.getId()}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                                  fill="currentColor"
                                  class="bi bi-dash-square-dotted text-danger" viewBox="0 0 16 16">
@@ -121,101 +94,29 @@
                             </svg>
                         </a>
                     </td>
-                    <td>1</td>
-                    <td>ІТЦ-1</td>
-                    <td>ЕСД-10Т/400М</td>
-                    <td>К22502</td>
-                    <td>ІІ</td>
-                    <td>11.2020</td>
-                    <td>01.2021</td>
-                    <td>3р 11міс</td>
-                    <td>причеп ІП-1.5</td>
-                    <td>7860</td>
-                    <td>генератор-3ф</td>
-                    <td>00211</td>
-                    <td>10</td>
-                    <td>400</td>
-                    <td>двигун 4Ч-8,5/11</td>
-                    <td>К357</td>
-                    <td>ДП</td>
-                    <td>04436</td>
-                    <td>5</td>
-                    <td>6.5</td>
-                    <td>32.5</td>
-                    <td>3.2%</td>
-                    <td>0.01</td>
-                </tr>
-                <tr>
-                    <td><a href="">Робочий лист</a></td>
-                    <td><a href="">Редагувати</a></td>
-                    <td>
-                        <a href="">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                 fill="currentColor"
-                                 class="bi bi-dash-square-dotted text-danger" viewBox="0 0 16 16">
-                                <path d="M2.5 0c-.166 0-.33.016-.487.048l.194.98A1.51 1.51 0 0 1 2.5 1h.458V0H2.5zm2.292 0h-.917v1h.917V0zm1.833 0h-.917v1h.917V0zm1.833 0h-.916v1h.916V0zm1.834 0h-.917v1h.917V0zm1.833 0h-.917v1h.917V0zM13.5 0h-.458v1h.458c.1 0 .199.01.293.029l.194-.981A2.51 2.51 0 0 0 13.5 0zm2.079 1.11a2.511 2.511 0 0 0-.69-.689l-.556.831c.164.11.305.251.415.415l.83-.556zM1.11.421a2.511 2.511 0 0 0-.689.69l.831.556c.11-.164.251-.305.415-.415L1.11.422zM16 2.5c0-.166-.016-.33-.048-.487l-.98.194c.018.094.028.192.028.293v.458h1V2.5zM.048 2.013A2.51 2.51 0 0 0 0 2.5v.458h1V2.5c0-.1.01-.199.029-.293l-.981-.194zM0 3.875v.917h1v-.917H0zm16 .917v-.917h-1v.917h1zM0 5.708v.917h1v-.917H0zm16 .917v-.917h-1v.917h1zM0 7.542v.916h1v-.916H0zm15 .916h1v-.916h-1v.916zM0 9.375v.917h1v-.917H0zm16 .917v-.917h-1v.917h1zm-16 .916v.917h1v-.917H0zm16 .917v-.917h-1v.917h1zm-16 .917v.458c0 .166.016.33.048.487l.98-.194A1.51 1.51 0 0 1 1 13.5v-.458H0zm16 .458v-.458h-1v.458c0 .1-.01.199-.029.293l.981.194c.032-.158.048-.32.048-.487zM.421 14.89c.183.272.417.506.69.689l.556-.831a1.51 1.51 0 0 1-.415-.415l-.83.556zm14.469.689c.272-.183.506-.417.689-.69l-.831-.556c-.11.164-.251.305-.415.415l.556.83zm-12.877.373c.158.032.32.048.487.048h.458v-1H2.5c-.1 0-.199-.01-.293-.029l-.194.981zM13.5 16c.166 0 .33-.016.487-.048l-.194-.98A1.51 1.51 0 0 1 13.5 15h-.458v1h.458zm-9.625 0h.917v-1h-.917v1zm1.833 0h.917v-1h-.917v1zm1.834 0h.916v-1h-.916v1zm1.833 0h.917v-1h-.917v1zm1.833 0h.917v-1h-.917v1zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
-                            </svg>
-                        </a>
-                    </td>
-                    <td>1</td>
-                    <td>ІТЦ-1</td>
-                    <td>ЕСД-10Т/400М</td>
-                    <td>К22502</td>
-                    <td>ІІ</td>
-                    <td>11.2020</td>
-                    <td>01.2021</td>
-                    <td>3р 11міс</td>
-                    <td>причеп ІП-1.5</td>
-                    <td>7860</td>
-                    <td>генератор-3ф</td>
-                    <td>00211</td>
-                    <td>10</td>
-                    <td>400</td>
-                    <td>двигун 4Ч-8,5/11</td>
-                    <td>К357</td>
-                    <td>ДП</td>
-                    <td>04436</td>
-                    <td>5</td>
-                    <td>6.5</td>
-                    <td>32.5</td>
-                    <td>3.2%</td>
-                    <td>0.01</td>
-                </tr>
-                <tr>
-                    <td><a href="">Робочий лист</a></td>
-                    <td><a href="">Редагувати</a></td>
-                    <td>
-                        <a href="">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                 fill="currentColor"
-                                 class="bi bi-dash-square-dotted text-danger" viewBox="0 0 16 16">
-                                <path d="M2.5 0c-.166 0-.33.016-.487.048l.194.98A1.51 1.51 0 0 1 2.5 1h.458V0H2.5zm2.292 0h-.917v1h.917V0zm1.833 0h-.917v1h.917V0zm1.833 0h-.916v1h.916V0zm1.834 0h-.917v1h.917V0zm1.833 0h-.917v1h.917V0zM13.5 0h-.458v1h.458c.1 0 .199.01.293.029l.194-.981A2.51 2.51 0 0 0 13.5 0zm2.079 1.11a2.511 2.511 0 0 0-.69-.689l-.556.831c.164.11.305.251.415.415l.83-.556zM1.11.421a2.511 2.511 0 0 0-.689.69l.831.556c.11-.164.251-.305.415-.415L1.11.422zM16 2.5c0-.166-.016-.33-.048-.487l-.98.194c.018.094.028.192.028.293v.458h1V2.5zM.048 2.013A2.51 2.51 0 0 0 0 2.5v.458h1V2.5c0-.1.01-.199.029-.293l-.981-.194zM0 3.875v.917h1v-.917H0zm16 .917v-.917h-1v.917h1zM0 5.708v.917h1v-.917H0zm16 .917v-.917h-1v.917h1zM0 7.542v.916h1v-.916H0zm15 .916h1v-.916h-1v.916zM0 9.375v.917h1v-.917H0zm16 .917v-.917h-1v.917h1zm-16 .916v.917h1v-.917H0zm16 .917v-.917h-1v.917h1zm-16 .917v.458c0 .166.016.33.048.487l.98-.194A1.51 1.51 0 0 1 1 13.5v-.458H0zm16 .458v-.458h-1v.458c0 .1-.01.199-.029.293l.981.194c.032-.158.048-.32.048-.487zM.421 14.89c.183.272.417.506.69.689l.556-.831a1.51 1.51 0 0 1-.415-.415l-.83.556zm14.469.689c.272-.183.506-.417.689-.69l-.831-.556c-.11.164-.251.305-.415.415l.556.83zm-12.877.373c.158.032.32.048.487.048h.458v-1H2.5c-.1 0-.199-.01-.293-.029l-.194.981zM13.5 16c.166 0 .33-.016.487-.048l-.194-.98A1.51 1.51 0 0 1 13.5 15h-.458v1h.458zm-9.625 0h.917v-1h-.917v1zm1.833 0h.917v-1h-.917v1zm1.834 0h.916v-1h-.916v1zm1.833 0h.917v-1h-.917v1zm1.833 0h.917v-1h-.917v1zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
-                            </svg>
-                        </a>
-                    </td>
-                    <td>1</td>
-                    <td>ІТЦ-1</td>
-                    <td>ЕСД-10Т/400М</td>
-                    <td>К22502</td>
-                    <td>ІІ</td>
-                    <td>11.2020</td>
-                    <td>01.2021</td>
-                    <td>3р 11міс</td>
-                    <td>причеп ІП-1.5</td>
-                    <td>7860</td>
-                    <td>генератор-3ф</td>
-                    <td>00211</td>
-                    <td>10</td>
-                    <td>400</td>
-                    <td>двигун 4Ч-8,5/11</td>
-                    <td>К357</td>
-                    <td>ДП</td>
-                    <td>04436</td>
-                    <td>5</td>
-                    <td>6.5</td>
-                    <td>32.5</td>
-                    <td>3.2%</td>
-                    <td>0.01</td>
+                    <td th:text="${workSheet.getId()}"></td>
+                    <td th:text="${aggregate.getUnit().getName()}"></td>
+                    <td th:text="${aggregate.getName()}"></td>
+                    <td th:text="${aggregate.getManufacturerNumber()}"></td>
+                    <td th:text="${aggregate.getCategoryType().name()}"></td>
+                    <td th:text="${aggregate.getManufacturingDate()}"></td>
+                    <td th:text="${aggregate.getCommissioningDate()}"></td>
+                    <td th:text="${aggregate.calculateCommissioningAge()}"></td>
+                    <td th:text="${aggregate.getChassis().getType().getName()}"></td>
+                    <td th:text="${aggregate.getChassis().getNumber()}"></td>
+                    <td th:text="${aggregate.getGenerator().getGeneratorType().getName()}"></td>
+                    <td th:text="${aggregate.getGenerator().getNumber()}"></td>
+                    <td th:text="${aggregate.getGenerator().getPower()}"></td>
+                    <td th:text="${aggregate.getGenerator().getElectricCurrentType().getName()}"></td>
+                    <td th:text="${aggregate.getEngine().getEngineType().getName()}"></td>
+                    <td th:text="${aggregate.getEngine().getNumber()}"></td>
+                    <td th:text="${aggregate.getEngine().getEngineType().getFuelType().getName()}"></td>
+                    <td th:text="${aggregate.getEngine().getFromBeginningWork()}"></td>
+                    <td th:text="${workSheet.getFromBeginningMonthWork()}"></td>
+                    <td th:text="${aggregate.getEngine().getEngineType().getFuelRate()}"></td>
+                    <td th:text="${workSheet.getUsedFuel()}"></td>
+                    <td th:text="${aggregate.getEngine().getEngineType().getOilRate()}+'%'"></td>
+                    <td th:text="${workSheet.getUsedOil()}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -230,22 +131,15 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Заповніть поля надходжень ПММ</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="get">
+            <form th:action="'/aggregates/workSheets/create'+${aggregate.getId()}" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="fuel-count-name" class="col-form-label">Отримано пального:</label>
-                        <input type="text" class="form-control" id="fuel-count-name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="fuel-type-name" class="col-form-label">Тип пального:</label>
-                        <select class="form-select" id="fuel-type-name" aria-label="Default select example">
-                            <option selected value="1">ДП</option>
-                            <option value="2">А-80</option>
-                        </select>
+                        <input type="text" class="form-control" id="fuel-count-name" name="fuelEarned">
                     </div>
                     <div class="mb-3">
                         <label for="oil-count-name" class="col-form-label">Отримано мастила:</label>
-                        <input type="text" class="form-control" id="oil-count-name">
+                        <input type="text" class="form-control" id="oil-count-name" name="oilEarned">
                     </div>
                 </div>
                 <div class="modal-footer">

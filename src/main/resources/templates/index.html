@@ -19,6 +19,7 @@
                 Додати агрегат
             </button>
         </form>
+        <h1>Список агрегатів частини</h1>
         <form action="/search/aggregate/name" method="post">
             <div class="input-group pb-3 border-bottom">
                 <input class="form-control border-bottom-0" type="search" placeholder="Пошук по назві агрегату"
@@ -68,7 +69,7 @@
             </thead>
             <tbody>
             <tr th:each="aggregate : ${aggregates}">
-                <td><a th:href="'/aggregates/'+ ${aggregate.id} + '/workSheet/'">Робочий лист</a></td>
+                <td><a th:href="'/aggregates/workSheets/'+ ${aggregate.id}">Робочий лист</a></td>
                 <td><a th:href="'/aggregates/edit/'+${aggregate.id}">Редагувати</a></td>
                 <td>
                     <a th:href="'/aggregates/delete/'+${aggregate.id}">
