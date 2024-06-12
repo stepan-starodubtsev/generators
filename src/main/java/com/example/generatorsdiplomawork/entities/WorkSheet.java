@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.lang.annotation.Documented;
 import java.time.LocalDateTime;
 import java.util.Stack;
 
@@ -28,33 +29,41 @@ public class WorkSheet {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Stack<WorkSheetStub> workSheetStubs;
 
-    public WorkSheet(Double fromBeginningMonthWork, Double startFuelBalance,
-                     Double startOilBalance, Double obtainedFuelSum, Double obtainedOilSum, Double usedFuel,
-                     Double usedOil, Stack<WorkSheetStub> workSheetStubs) {
+    public WorkSheet(Double startFuelBalance,
+                     Double startOilBalance,  Stack<WorkSheetStub> workSheetStubs) {
         this.creatingDate = LocalDateTime.now();
-        this.fromBeginningMonthWork = fromBeginningMonthWork;
+        this.fromBeginningMonthWork = 0.0;
         this.startFuelBalance = startFuelBalance;
         this.startOilBalance = startOilBalance;
-        this.obtainedFuelSum = obtainedFuelSum;
-        this.obtainedOilSum = obtainedOilSum;
-        this.usedFuel = usedFuel;
-        this.usedOil = usedOil;
+        this.obtainedFuelSum = 0.0;
+        this.obtainedOilSum = 0.0;
+        this.usedFuel = 0.0;
+        this.usedOil = 0.0;
         this.workSheetStubs = workSheetStubs;
     }
 
-    public Double getFactStartFuelBalance() {
-        return startFuelBalance + obtainedFuelSum;
-    }
-
-    public Double getFactStartOilBalance() {
-        return startOilBalance + obtainedOilSum;
-    }
-
     public Double getEndFuelBalance() {
-        return getFactStartFuelBalance() - getUsedFuel();
+        return obtainedFuelSum - usedFuel;
     }
 
     public Double getEndOilBalance() {
-        return getFactStartOilBalance() - getUsedOil();
+        return obtainedOilSum - usedOil;
+    }
+
+    public void obtainFuel(Double fuelCount){
+        obtainedFuelSum =+ fuelCount;
+    }
+
+    public void useFuel(Double fuelCount){
+        obtainedFuelSum =- fuelCount;
+        usedFuel =+ fuelCount;
+    }
+    public void obtainOil(Double oilCount){
+        obtainedOilSum =+ oilCount;
+    }
+
+    public void useOil(Double oilCount){
+        obtainedOilSum =- oilCount;
+        usedOil =+ oilCount;
     }
 }

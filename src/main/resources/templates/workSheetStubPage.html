@@ -1,42 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Робочі листи</title>
+    <title>Робочий лист</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg bg-body-secondary">
-    <div class="container-fluid px-5">
-        <a class="navbar-brand" href="#">Агрегат дизельний ЕСД-10/400М</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="d-flex justify-content-end">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Відомість про рух ПММ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Керування користувачами</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Особистий кабінет</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Вийти з акаунта</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
+<nav th:insert="blocks/navbarAggregate :: #navbar"></nav>
+
 
 <main class="d-flex flex-row mx-5 mt-3">
     <div class="d-flex flex-column align-items-center align-items-sm-start text-white me-4">
@@ -46,13 +21,13 @@
                 <a href="/" class="nav-link align-middle px-0">Перейти на головну</a>
             </li>
             <li class="nav-item">
-                <a href="/account" class="nav-link align-middle px-0">Детальніше про агрегат </a>
+                <a th:href="'/aggregates/edit/'+${aggregate.getId()}" class="nav-link align-middle px-0">Детальніше про агрегат </a>
             </li>
             <li>
-                <a href="/admin/orders" class="nav-link px-0 align-middle">Календар напрацювань</a>
+                <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
             <li>
-                <a href="/admin/orders" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>
+                <a th:href="'/aggregates/workSheets/'+${workSheet.getId()}" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>
             </li>
         </ul>
     </div>
@@ -79,19 +54,19 @@
                     <th scope="col">Виконана робота</th>
                     <th scope="col">Отримане паливо(ДП), кг</th>
                     <th scope="col">Отримане мастило, кг</th>
+                    <th scope="col">Витрачене паливо, кг</th>
                     <th scope="col">Витрачене мастило, кг</th>
-                    <th scope="col">Витрачене паливо(ДП), кг</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>14.01.24 8:00</td>
-                    <td>14.01.24 9:00</td>
-                    <td>Робота агрегату по забезпеченню вузла зв'язку електроживленням</td>
-                    <td></td>
-                    <td></td>
-                    <td>1.7</td>
-                    <td>0</td>
+                <tr th:each="workSheetStub : ${workSheet.getWorkSheetStubs()}">
+                    <td th:text="${workSheetStub.getStartWorkDateTime()}"></td>
+                    <td th:text="${workSheetStub.getEndWorkDateTime()}"></td>
+                    <td th:text="${workSheetStub.getWorkDescription()}"></td>
+                    <td th:text="${workSheetStub.getObtainedFuel()}"></td>
+                    <td th:text="${workSheetStub.getObtainedOil()}"></td>
+                    <td th:text="${workSheetStub.getUsedFuel()}"></td>
+                    <td th:text="${workSheetStub.getUsedOil()}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -106,19 +81,27 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Заповніть поля про роботу агрегата</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="get">
+            <form th:action="'/aggregates/'+ ${aggregate.id}+'/workSheets/'+${workSheet.getId()}+'/stub/create'" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="startDate" class="col-form-label">Дата, час початку роботи:</label>
-                        <input type="datetime-local" class="form-control" id="startDate">
+                        <input type="datetime-local" class="form-control" id="startDate" name="startDate">
                     </div>
                     <div class="mb-3">
                         <label for="endDate" class="col-form-label">Дата, час кінця роботи:</label>
-                        <input type="datetime-local" class="form-control" id="endDate">
+                        <input type="datetime-local" class="form-control" id="endDate" name="endDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="obtainedFuel" class="col-form-label">Отримано палива:</label>
+                        <input type="text" class="form-control" id="obtainedFuel" name="obtainedFuel">
+                    </div>
+                    <div class="mb-3">
+                        <label for="obtainedOil" class="col-form-label">Отримано мастила:</label>
+                        <input type="text" class="form-control" id="obtainedOil" name="obtainedOil">
                     </div>
                     <div class="mb-3">
                         <label for="work-text" class="col-form-label">Виконана робота:</label>
-                        <textarea class="form-control" id="work-text"></textarea>
+                        <textarea class="form-control" id="work-text" name="workText"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

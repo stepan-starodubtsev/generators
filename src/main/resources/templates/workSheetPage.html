@@ -27,7 +27,7 @@
                 <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
             <li>
-                <a th:href="'/aggregates/'+${aggregate.getId()}+'/workSheets/'+${workSheet.getId()}+'/workSheetStub'"
+                <a th:href="'/aggregates/'+${aggregate.getId()}+'/workSheets/'+${workSheet.getId()}+'/stub'"
                    class="nav-link px-0 align-middle">Заповнити корінець робочого листа</a>
             </li>
         </ul>
@@ -80,8 +80,6 @@
                         <th scope="col">Залишок на кінець періоду</th>
                         <th scope="col">Використано</th>
                         <th scope="col">Належить за нормою</th>
-                        <th scope="col">Економія</th>
-                        <th scope="col">Перевитрата</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -93,9 +91,17 @@
                         <td th:text="${workSheet.getObtainedFuelSum()}"></td>
                         <td th:text="${workSheet.getEndFuelBalance()}"></td>
                         <td th:text="${workSheet.getUsedFuel()}"></td>
-                        <td th:text="${aggregate.getEngine().getEngineType().getFuelRate()}"></td>
+                        <td th:text="${normalRateFuel}"></td>
+                    </tr>
+                    <tr>
+                        <td>Мастило</td>
                         <td></td>
-                        <td></td>
+                        <td>1</td>
+                        <td th:text="${workSheet.getStartOilBalance()}"></td>
+                        <td th:text="${workSheet.getObtainedOilSum()}"></td>
+                        <td th:text="${workSheet.getEndOilBalance()}"></td>
+                        <td th:text="${workSheet.getUsedOil()}"></td>
+                        <td th:text="${normalRateOil}"></td>
                     </tr>
                     </tbody>
                 </table>
