@@ -1,6 +1,7 @@
 package com.example.generatorsdiplomawork.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "aggregates")
 public class Aggregate {
     @Id
@@ -34,6 +36,20 @@ public class Aggregate {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<WorkSheet> workSheets;
 
+    public Aggregate(String name, Unit unit, String manufacturerNumber, CategoryType categoryType,
+                     LocalDateTime manufacturingDate, LocalDateTime commissioningDate, Chassis chassis,
+                     Generator generator, Engine engine, List<WorkSheet> workSheets) {
+        this.name = name;
+        this.unit = unit;
+        this.manufacturerNumber = manufacturerNumber;
+        this.categoryType = categoryType;
+        this.manufacturingDate = manufacturingDate;
+        this.commissioningDate = commissioningDate;
+        this.chassis = chassis;
+        this.generator = generator;
+        this.engine = engine;
+        this.workSheets = workSheets;
+    }
 
     public String calculateCommissioningAge() {
         LocalDateTime age = LocalDateTime.now();

@@ -20,4 +20,10 @@ public class Engine {
     private EngineType engineType;
     private String number;
     private Double fromBeginningWork;
+
+    public Engine(EngineType engineType, String number, Double fromBeginningWork) {
+        this.engineType = engineType;
+        this.number = number;
+        this.fromBeginningWork = fromBeginningWork;
+    }
 }

@@ -20,4 +20,11 @@ public class Generator {
     private Double power;
     @ManyToOne(fetch = FetchType.EAGER)
     private ElectricCurrentType electricCurrentType;
+
+    public Generator(GeneratorType generatorType, String number, Double power, ElectricCurrentType electricCurrentType) {
+        this.generatorType = generatorType;
+        this.number = number;
+        this.power = power;
+        this.electricCurrentType = electricCurrentType;
+    }
 }

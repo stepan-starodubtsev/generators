@@ -20,7 +20,8 @@
                 <a href="/" class="nav-link align-middle px-0">Перейти на головну</a>
             </li>
             <li th:if="${!isCreating}">
-                <a href="/admin/" class="nav-link px-0 align-middle">До робочого листа</a>
+                <a th:href="'/aggregates/'+${aggregate.id}+'/workSheets'"
+                   class="nav-link px-0 align-middle">До робочого листа</a>
             </li>
         </ul>
     </div>
@@ -32,7 +33,7 @@
                 <div class="row">
                     <div class="col-md-4 my-1">
                         <label for="name" class="form-label">Назва агрегату</label>
-                        <input type="text" class="form-control" id="name"
+                        <input type="text" class="form-control" id="name" th:value="${aggregateName}"
                                name="name" required>
                         <div class="invalid-feedback">
                             Заповніть поле
@@ -41,6 +42,7 @@
                     <div class="col-md-4 my-1">
                         <label for="manufacture-number" class="form-label">Заводський номер</label>
                         <input type="text" class="form-control" id="manufacture-number"
+                               th:value="${aggregateManufacturerNumber}"
                                name="manufactureNumber" required>
                         <div class="invalid-feedback">
                             Заповніть поле
@@ -49,16 +51,13 @@
                     <div class="col-md-4 my-1">
                         <label for="category" class="form-label">Категорія</label>
                         <select class="form-select" id="category" name="category">
-                            <option value="I">I</option>
-                            <option value="II" selected>II</option>
-                            <option value="III">III</option>
-                            <option value="IV">IV</option>
-                            <option value="V">V</option>
+                            <option th:each="categoryType : ${categoryTypes}" th:value="${categoryType.name()}"
+                                    th:text="${categoryType.name()}"></option>
                         </select>
                     </div>
                     <div class="col-md-4 my-1">
                         <label for="unit" class="form-label">Підрозділ</label>
-                        <select class="form-select" id="unit" name="unit">
+                        <select class="form-select" id="unit" name="unitId">
                             <option th:each="unit : ${units}" th:value="${unit.getId()}"
                                     th:text="${unit.getName()}"></option>
                         </select>
@@ -66,6 +65,7 @@
                     <div class="col-md-4 my-1">
                         <label for="manufacture-date" class="form-label">Дата виготовлення</label>
                         <input type="datetime-local" class="form-control" id="manufacture-date"
+                               th:value="${aggregateManufacturingDate}"
                                name="manufactureDate" required>
                         <div class="invalid-feedback">
                             Заповніть поле
@@ -74,6 +74,7 @@
                     <div class="col-md-4 my-1">
                         <label for="commissioning-date" class="form-label">Дата введення в експлуатацію</label>
                         <input type="datetime-local" class="form-control" id="commissioning-date"
+                               th:value="${aggregateCommissioningDate}"
                                name="commissioningDate" required>
                         <div class="invalid-feedback">
                             Заповніть поле
@@ -81,7 +82,7 @@
                     </div>
                     <div class="col-md-4 my-1">
                         <label for="chassis-type" class="form-label">Причеп/Шасі</label>
-                        <select class="form-select" id="chassis-type" name="unit">
+                        <select class="form-select" id="chassis-type" name="chassisTypeId">
                             <option th:each="chassisType : ${chassisTypes}" th:value="${chassisType.getId()}"
                                     th:text="${chassisType.getName()}"></option>
                         </select>
@@ -89,6 +90,7 @@
                     <div class="col-md-4 my-1">
                         <label for="chassis-number" class="form-label">Номер причепа/шасі</label>
                         <input type="text" class="form-control" id="chassis-number"
+                               th:value="${aggregateChassisNumber}"
                                name="chassisNumber" required>
                         <div class="invalid-feedback">
                             Заповніть поле
@@ -96,7 +98,7 @@
                     </div>
                     <div class="col-md-4 my-1">
                         <label for="generator-type" class="form-label">Джерело електроживлення</label>
-                        <select class="form-select" id="generator-type" name="generatorType">
+                        <select class="form-select" id="generator-type" name="generatorTypeId">
                             <option th:each="generatorType : ${generatorTypes}" th:value="${generatorType.getId()}"
                                     th:text="${generatorType.getName()}"></option>
                         </select>
@@ -104,11 +106,13 @@
                     <div class="col-md-4 my-1">
                         <label for="generator-type" class="form-label">Номер генератора</label>
                         <input type="text" class="form-control" id="generator-number"
-                               name="generatorType">
+                               th:value="${aggregateGeneratorNumber}"
+                               name="generatorNumber">
                     </div>
                     <div class="col-md-4 my-1">
                         <label for="power" class="form-label">Потужність генератора кВт/год</label>
                         <input type="text" class="form-control" id="power"
+                               th:value="${aggregateGeneratorPower}"
                                name="power" required>
                         <div class="invalid-feedback">
                             Заповніть поле
@@ -116,7 +120,7 @@
                     </div>
                     <div class="col-md-4 my-1">
                         <label for="electric-current" class="form-label">Тип струму, В</label>
-                        <select class="form-select" id="electric-current" name="electricCurrent">
+                        <select class="form-select" id="electric-current" name="electricCurrentId">
                             <option th:each="electricCurrentType : ${electricCurrentTypes}"
                                     th:value="${electricCurrentType.getId()}"
                                     th:text="${electricCurrentType.getName()}"></option>
@@ -124,7 +128,7 @@
                     </div>
                     <div class="col-md-4 my-1">
                         <label for="engine-type" class="form-label">Марка/тип двигуна</label>
-                        <select class="form-select" id="engine-type" name="engineType">
+                        <select class="form-select" id="engine-type" name="engineTypeId">
                             <option th:each="engineType : ${engineTypes}"
                                     th:value="${engineType.getId()}"
                                     th:text="${engineType.getName()}"></option>
@@ -132,14 +136,18 @@
                     </div>
                     <div class="col-md-4 my-1">
                         <label for="engine-number" class="form-label">Номер двигуна</label>
-                        <input type="text" class="form-control" id="engine-number" name="engineNumber" required>
+                        <input type="text" class="form-control" id="engine-number"
+                               th:value="${aggregateEngineNumber}"
+                               name="engineNumber" required>
                         <div class="invalid-feedback">
                             Заповніть поле
                         </div>
                     </div>
                     <div class="col-md-4 my-1">
                         <label for="fromBeginningWork" class="form-label">Напрацювання з початку експлуатації</label>
-                        <input type="text" class="form-control" id="fromBeginningWork" name="fromBeginningWork" required>
+                        <input type="text" class="form-control" id="fromBeginningWork"
+                               th:value="${aggregateFromBeginningWork}"
+                               name="fromBeginningWork" required>
                         <div class="invalid-feedback">
                             Заповніть поле
                         </div>
