@@ -36,7 +36,7 @@
                     Додати робочий лист
                 </button>
             </form>
-            <form th:action="'/search/workSheet/month/'+${aggregate.getId()}" method="post">
+            <form th:action="'/aggregates/'+${aggregate.getId()}+'/workSheets/search/month/'" method="post">
                 <div class="input-group pb-3 border-bottom">
                     <input class="form-control border-end-0 border" type="search" placeholder="Пошук по місяцю"
                            name="workSheetMonth">
@@ -131,7 +131,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Заповніть поля надходжень ПММ</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form th:action="'/aggregates/workSheets/create'+${aggregate.getId()}" method="post">
+            <form th:action="'/aggregates/'+ ${aggregate.id}+'/workSheets/create'" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="fuel-count-name" class="col-form-label">Отримано пального:</label>

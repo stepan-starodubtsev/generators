@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Stack;
 
 @Controller
-@RequestMapping("/aggregates/workSheets")
+@RequestMapping("/aggregates/{aggregateId}/workSheets")
 public class WorkSheetController {
     private final AggregateRepository aggregateRepository;
     public WorkSheetController(AggregateRepository aggregateRepository) {
         this.aggregateRepository = aggregateRepository;
     }
 
-    @GetMapping("/{aggregateId}")
+    @GetMapping("/")
     public String workSheetsPage(@PathVariable Long aggregateId, Model model){
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
 
@@ -29,7 +29,7 @@ public class WorkSheetController {
         return "workSheetsPage";
     }
 
-    @PostMapping("/search/workSheet/month/{aggregateId}")
+    @PostMapping("/search/workSheet/month")
     public String searchAggregateByName(@PathVariable Long aggregateId,
                                         @RequestParam String workSheetMonth, Model model) {
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
@@ -43,7 +43,7 @@ public class WorkSheetController {
         return "index";
     }
 
-    @PostMapping("/aggregates/workSheets/create/{aggregateId}")
+    @PostMapping("/create")
     public String create(@PathVariable Long aggregateId,
                          @RequestParam String fuelEarned,
                          @RequestParam String oilEarned){
@@ -67,4 +67,16 @@ public class WorkSheetController {
         return "redirect: workSheetsPage";
     }
 
+    @GetMapping("/{workSheetId}")
+    public String getWorkSheetPage(@PathVariable Long aggregateId,
+                                   @PathVariable Long workSheetId,
+                                   Model model){
+        Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
+        WorkSheet workSheet = aggregate.getWorkSheets().stream()
+                .filter(x -> x.getId().equals(workSheetId)).toList().get(0);
+
+        model.addAttribute("aggregate", aggregate);
+        model.addAttribute("workSheet", workSheet);
+        return "workSheetPage";
+    }
 }

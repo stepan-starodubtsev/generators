@@ -69,7 +69,7 @@
             </thead>
             <tbody>
             <tr th:each="aggregate : ${aggregates}">
-                <td><a th:href="'/aggregates/workSheets/'+ ${aggregate.id}">Робочий лист</a></td>
+                <td><a th:href="'/aggregates/'+ ${aggregate.id}+'/workSheets/'">Робочий лист</a></td>
                 <td><a th:href="'/aggregates/edit/'+${aggregate.id}">Редагувати</a></td>
                 <td>
                     <a th:href="'/aggregates/delete/'+${aggregate.id}">
