@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,49 +10,30 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg bg-body-secondary">
-    <div class="container-fluid px-5">
-        <a class="navbar-brand" href="#">Інформація по частині</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="d-flex justify-content-end">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Відомість про рух ПММ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Керування користувачами</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Особистий кабінет</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Вийти з акаунта</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
+<nav th:insert="blocks/navbar :: #navbar"></nav>
 
 <main class="d-flex flex-column mt-4 mx-5">
-    <form action="" method="post">
-        <div class="input-group pb-3 border-bottom">
-            <input class="form-control border-end-0 border" type="search" placeholder="Пошук по назві агрегату"
-                   name="searchedLogin">
-            <span class="input-group-append">
+    <div class="d-flex justify-content-between">
+        <form action="/aggregates/create" method="get" class="p-0 m-0">
+            <button type="submit" class="btn btn-primary">
+                Додати агрегат
+            </button>
+        </form>
+        <form action="/search/aggregate/name" method="post">
+            <div class="input-group pb-3 border-bottom">
+                <input class="form-control border-bottom-0" type="search" placeholder="Пошук по назві агрегату"
+                       name="searchedName">
+                <span class="input-group-append">
                         <button class="btn btn-outline-dark bg-white border-bottom border ms-n5" type='submit'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                             </svg>
                         </button>
-            </span>
-        </div>
-    </form>
+                    </span>
+            </div>
+        </form>
+    </div>
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead>
@@ -86,11 +67,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td><a href="">Робочий лист</a></td>
-                <td><a href="">Редагувати</a></td>
+            <tr th:each="aggregate : ${aggregates}">
+                <td><a th:href="'/aggregates/'+ ${aggregate.id} + '/workSheet/'">Робочий лист</a></td>
+                <td><a th:href="'/aggregates/edit/'+${aggregate.id}">Редагувати</a></td>
                 <td>
-                    <a href="">
+                    <a th:href="'/aggregates/delete/'+${aggregate.id}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                              fill="currentColor"
                              class="bi bi-dash-square-dotted text-danger" viewBox="0 0 16 16">
@@ -98,29 +79,29 @@
                         </svg>
                     </a>
                 </td>
-                <td>1</td>
-                <td>ІТЦ-1</td>
-                <td>ЕСД-10Т/400М</td>
-                <td>К22502</td>
-                <td>ІІ</td>
-                <td>11.2020</td>
-                <td>01.2021</td>
-                <td>3р 11міс</td>
-                <td>причеп ІП-1.5</td>
-                <td>7860</td>
-                <td>генератор-3ф</td>
-                <td>00211</td>
-                <td>10</td>
-                <td>400</td>
-                <td>двигун 4Ч-8,5/11</td>
-                <td>К357</td>
-                <td>ДП</td>
-                <td>04436</td>
-                <td>5</td>
-                <td>6.5</td>
-                <td>32.5</td>
-                <td>3.2%</td>
-                <td>0.01</td>
+                <td th:text="${aggregate.getId()}"></td>
+                <td th:text="${aggregate.getUnit().getName()}"></td>
+                <td th:text="${aggregate.getName()}"></td>
+                <td th:text="${aggregate.getManufacturerNumber()}"></td>
+                <td th:text="${aggregate.getCategoryType()}"></td>
+                <td th:text="${aggregate.getManufacturingDate()}"></td>
+                <td th:text="${aggregate.getCommissioningDate()}"></td>
+                <td th:text="${aggregate.calculateCommissioningAge()}"></td>
+                <td th:text="${aggregate.getChassis().getType().getName()}"></td>
+                <td th:text="${aggregate.getChassis().getNumber()}"></td>
+                <td th:text="${aggregate.getGenerator().getGeneratorType().getName()}"></td>
+                <td th:text="${aggregate.getGenerator().getNumber()}"></td>
+                <td th:text="${aggregate.getGenerator().getPower()}"></td>
+                <td th:text="${aggregate.getGenerator().getElectricCurrentType()}"></td>
+                <td th:text="${aggregate.getEngine().getEngineType().getName()}"></td>
+                <td th:text="${aggregate.getEngine().getNumber()}"></td>
+                <td th:text="${aggregate.getEngine().getEngineType().getFuelType().getName()}"></td>
+                <td th:text="${aggregate.getEngine().getFromBeginningWork()}"></td>
+                <td th:text="${aggregate.getLastWorkSheet().getFromBeginningMonthWork()}"></td>
+                <td th:text="${aggregate.getEngine().getEngineType().getFuelRate()}"></td>
+                <td th:text="${aggregate.getLastWorkSheet().getUsedFuel()}"></td>
+                <td th:text="${aggregate.getEngine().getEngineType().getOilRate()}"></td>
+                <td th:text="${aggregate.getLastWorkSheet().getUsedOil()}"></td>
             </tr>
             </tbody>
         </table>

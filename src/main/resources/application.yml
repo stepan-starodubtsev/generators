@@ -2,8 +2,8 @@ spring:
   application:
     name: GeneratorsDiplomaWork
   datasource:
-    url: jdbc:postgresql://localhost:5432/microservice
-    username: root
+    url: jdbc:postgresql://localhost:5432/aggregate_db
+    username: postgres
     password: root
   jpa:
     hibernate:
