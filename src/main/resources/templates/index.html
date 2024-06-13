@@ -69,7 +69,7 @@
             </thead>
             <tbody>
             <tr th:each="aggregate : ${aggregates}">
-                <td><a th:href="'/aggregates/'+ ${aggregate.id}+'/workSheets/'">Робочий лист</a></td>
+                <td><a th:href="'/aggregates/'+${aggregate.id}+'/workSheets/'">Робочий лист</a></td>
                 <td><a th:href="'/aggregates/edit/'+${aggregate.id}">Редагувати</a></td>
                 <td>
                     <a th:href="'/aggregates/delete/'+${aggregate.id}">
@@ -93,7 +93,7 @@
                 <td th:text="${aggregate.getGenerator().getGeneratorType().getName()}"></td>
                 <td th:text="${aggregate.getGenerator().getNumber()}"></td>
                 <td th:text="${aggregate.getGenerator().getPower()}"></td>
-                <td th:text="${aggregate.getGenerator().getElectricCurrentType()}"></td>
+                <td th:text="${aggregate.getGenerator().getElectricCurrentType().getName()}"></td>
                 <td th:text="${aggregate.getEngine().getEngineType().getName()}"></td>
                 <td th:text="${aggregate.getEngine().getNumber()}"></td>
                 <td th:text="${aggregate.getEngine().getEngineType().getFuelType().getName()}"></td>
@@ -101,7 +101,7 @@
                 <td th:text="${aggregate.getLastWorkSheet().getFromBeginningMonthWork()}"></td>
                 <td th:text="${aggregate.getEngine().getEngineType().getFuelRate()}"></td>
                 <td th:text="${aggregate.getLastWorkSheet().getUsedFuel()}"></td>
-                <td th:text="${aggregate.getEngine().getEngineType().getOilRate()}"></td>
+                <td th:text="${aggregate.getEngine().getEngineType().getOilRate()}+'%'"></td>
                 <td th:text="${aggregate.getLastWorkSheet().getUsedOil()}"></td>
             </tr>
             </tbody>

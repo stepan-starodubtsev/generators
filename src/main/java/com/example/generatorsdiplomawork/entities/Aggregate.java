@@ -20,20 +20,20 @@ public class Aggregate {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Unit unit;
     private String manufacturerNumber;
     @Enumerated(EnumType.STRING)
     private CategoryType categoryType;
     private LocalDateTime manufacturingDate;
     private LocalDateTime commissioningDate;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Chassis chassis;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Generator generator;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Engine engine;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<WorkSheet> workSheets;
 
     public Aggregate(String name, Unit unit, String manufacturerNumber, CategoryType categoryType,
@@ -64,6 +64,9 @@ public class Aggregate {
     }
 
     public WorkSheet getLastWorkSheet() {
+        if (workSheets.isEmpty()){
+            return new WorkSheet();
+        }
         return workSheets.get(workSheets.size() - 1);
     }
 }

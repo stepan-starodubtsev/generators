@@ -27,7 +27,7 @@
                 <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
             <li>
-                <a th:href="'/aggregates/workSheets/'+${workSheet.getId()}" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>
+                <a th:href="'/aggregates/'+${aggregate.id}+'/workSheets/'" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>
             </li>
         </ul>
     </div>
@@ -39,7 +39,8 @@
                     Додати помітку
                 </button>
             </form>
-            <form method="get" class="p-0 m-0">
+            <form th:action="'/aggregates/'+ ${aggregate.id}+'/workSheets/'+${workSheet.getId()}+'/stub/delete'"
+                  method="post" class="p-0 m-0">
                 <button type="submit" class="btn btn-primary">
                     Видалити помітку
                 </button>
@@ -65,7 +66,7 @@
                     <td th:text="${workSheetStub.getWorkDescription()}"></td>
                     <td th:text="${workSheetStub.getObtainedFuel()}"></td>
                     <td th:text="${workSheetStub.getObtainedOil()}"></td>
-                    <td th:text="${workSheetStub.getUsedFuel()}"></td>
+                    <td th:text="${workSheetStub.getUsedFuel().}"></td>
                     <td th:text="${workSheetStub.getUsedOil()}"></td>
                 </tr>
                 </tbody>

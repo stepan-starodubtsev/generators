@@ -20,14 +20,14 @@
                 <a href="/" class="nav-link align-middle px-0">Перейти на головну</a>
             </li>
             <li th:if="${!isCreating}">
-                <a th:href="'/aggregates/'+${aggregate.id}+'/workSheets'"
+                <a th:href="'/aggregates/'+${aggregate.id}+'/workSheets/'"
                    class="nav-link px-0 align-middle">До робочого листа</a>
             </li>
         </ul>
     </div>
     <div class="content-block">
         <h1 class="text-center">Основна інформація про агрерат</h1>
-        <form th:action="'/aggregates/create/'" method="post"
+        <form th:action="${actionPath}" method="post"
               class="row g-2 needs-validation mt-1" enctype="multipart/form-data">
             <div class="col-md-9 col-sm-12 card-body px-4">
                 <div class="row">
@@ -104,7 +104,7 @@
                         </select>
                     </div>
                     <div class="col-md-4 my-1">
-                        <label for="generator-type" class="form-label">Номер генератора</label>
+                        <label for="generator-number" class="form-label">Номер генератора</label>
                         <input type="text" class="form-control" id="generator-number"
                                th:value="${aggregateGeneratorNumber}"
                                name="generatorNumber">

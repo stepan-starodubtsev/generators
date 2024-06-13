@@ -15,22 +15,23 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class MainController {
-    private List<Aggregate> aggregates;
     private final AggregateRepository aggregateRepository;
 
     public MainController(AggregateRepository aggregateRepository) {
         this.aggregateRepository = aggregateRepository;
-        aggregates = aggregateRepository.findAll();
     }
 
     @GetMapping
     public String index(Model model) {
+        List<Aggregate> aggregates = aggregateRepository.findAll();
+
         model.addAttribute("aggregates", aggregates);
         return "index";
     }
 
     @PostMapping("search/aggregate/name")
     public String searchAggregateByName(@RequestParam String searchedName, Model model) {
+        List<Aggregate> aggregates = aggregateRepository.findAll();
         List<Aggregate> searchedAggregate = aggregates.stream()
                 .filter(x -> x.getName().toLowerCase().contains(searchedName.toLowerCase())).toList();
         model.addAttribute("aggregates", searchedAggregate);

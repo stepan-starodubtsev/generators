@@ -20,7 +20,7 @@ public class WorkSheetStub {
     private LocalDateTime startWorkDateTime;
     private LocalDateTime endWorkDateTime;
     private String workDescription;
-    private Long workHours;
+    private Double workHours;
     private Double obtainedFuel;
     private Double obtainedOil;
     private Double usedFuel;
@@ -33,13 +33,13 @@ public class WorkSheetStub {
         this.workDescription = workDescription;
         this.obtainedFuel = obtainedFuel;
         this.obtainedOil = obtainedOil;
-        this.workHours = Duration.between(startWorkDateTime, endWorkDateTime).toHours();
+        this.workHours = (double) Duration.between(startWorkDateTime, endWorkDateTime).toHours();
         this.usedFuel = calculateUsedFuel(useFuelNorm);
         this.usedOil = calculateUsedOil(useOilNorm);
     }
 
     private double calculateUsedFuel(Double useFuelNorm) {
-        long workMinutes = workHours * 60;
+        double workMinutes = workHours * 60;
         return (workMinutes * useFuelNorm) / 60;
     }
 

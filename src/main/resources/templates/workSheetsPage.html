@@ -84,9 +84,9 @@
                 </thead>
                 <tbody>
                 <tr th:each="workSheet : ${workSheets}">
-                    <td><a th:href="'/aggregates/workSheets/'+${workSheet.getId()}">Переглянути</a></td>
+                    <td><a th:href="'/aggregates/'+${aggregate.getId()}+'/workSheets/'+${workSheet.getId()}">Переглянути</a></td>
                     <td>
-                        <a th:href="'/aggregates/workSheets/delete/'+${workSheet.getId()}">
+                        <a th:href="'/aggregates/'+${aggregate.getId()}+'/workSheets/delete/'+${workSheet.getId()}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                                  fill="currentColor"
                                  class="bi bi-dash-square-dotted text-danger" viewBox="0 0 16 16">

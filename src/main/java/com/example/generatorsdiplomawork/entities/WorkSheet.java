@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.lang.annotation.Documented;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Stack;
 
 @Entity
@@ -26,8 +27,8 @@ public class WorkSheet {
     private Double obtainedOilSum;
     private Double usedFuel;
     private Double usedOil;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Stack<WorkSheetStub> workSheetStubs;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<WorkSheetStub> workSheetStubs;
 
     public WorkSheet(Double startFuelBalance,
                      Double startOilBalance,  Stack<WorkSheetStub> workSheetStubs) {
@@ -51,19 +52,23 @@ public class WorkSheet {
     }
 
     public void obtainFuel(Double fuelCount){
-        obtainedFuelSum =+ fuelCount;
+        obtainedFuelSum += fuelCount;
     }
 
     public void useFuel(Double fuelCount){
-        obtainedFuelSum =- fuelCount;
-        usedFuel =+ fuelCount;
+        obtainedFuelSum -= fuelCount;
+        usedFuel += fuelCount;
     }
     public void obtainOil(Double oilCount){
-        obtainedOilSum =+ oilCount;
+        obtainedOilSum += oilCount;
     }
 
     public void useOil(Double oilCount){
-        obtainedOilSum =- oilCount;
-        usedOil =+ oilCount;
+        obtainedOilSum -= oilCount;
+        usedOil += oilCount;
+    }
+
+    public void doWork(Double hoursOfWork){
+        fromBeginningMonthWork += hoursOfWork;
     }
 }

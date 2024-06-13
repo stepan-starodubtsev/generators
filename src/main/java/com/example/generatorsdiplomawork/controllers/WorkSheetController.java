@@ -6,6 +6,7 @@ import com.example.generatorsdiplomawork.entities.WorkSheet;
 import com.example.generatorsdiplomawork.entities.WorkSheetStub;
 import com.example.generatorsdiplomawork.repositories.AggregateRepository;
 import com.example.generatorsdiplomawork.repositories.WorkSheetRepository;
+import com.example.generatorsdiplomawork.repositories.WorkSheetStubRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +20,16 @@ import java.util.Stack;
 public class WorkSheetController {
     private final AggregateRepository aggregateRepository;
     private final WorkSheetRepository workSheetRepository;
+    private final WorkSheetStubRepository workSheetStubRepository;
 
-    public WorkSheetController(AggregateRepository aggregateRepository, WorkSheetRepository workSheetRepository) {
+    public WorkSheetController(AggregateRepository aggregateRepository, WorkSheetRepository workSheetRepository, WorkSheetStubRepository workSheetStubRepository) {
         this.aggregateRepository = aggregateRepository;
         this.workSheetRepository = workSheetRepository;
+        this.workSheetStubRepository = workSheetStubRepository;
     }
 
     @GetMapping("/")
-    public String workSheetsPage(@PathVariable Long aggregateId, Model model){
+    public String workSheetsPage(@PathVariable Long aggregateId, Model model) {
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
 
         model.addAttribute("aggregate", aggregate);
@@ -39,7 +42,7 @@ public class WorkSheetController {
                                         @RequestParam String workSheetMonth, Model model) {
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
         List<WorkSheet> workSheets = aggregate.getWorkSheets();
-        if (!workSheets.isEmpty()){
+        if (!workSheets.isEmpty()) {
             List<WorkSheet> searshedList = workSheets.stream()
                     .filter(x -> x.getCreatingDate().getMonthValue() ==
                             Month.valueOf(workSheetMonth.toUpperCase()).ordinal()).toList();
@@ -50,22 +53,35 @@ public class WorkSheetController {
 
     @PostMapping("/create")
     public String create(@PathVariable Long aggregateId,
-                         @RequestParam String fuelSaved,
-                         @RequestParam String oilSaved){
+                         @RequestParam String fuelEarned,
+                         @RequestParam String oilEarned) {
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
 
         WorkSheet workSheet = new WorkSheet(
-                Double.parseDouble(fuelSaved), Double.parseDouble(oilSaved), new Stack<>());
+                Double.parseDouble(fuelEarned), Double.parseDouble(oilEarned), new Stack<>());
 
         aggregate.getWorkSheets().add(workSheet);
         aggregateRepository.save(aggregate);
-        return "workSheetsPage";
+        return "redirect:/aggregates/" + aggregate.getId() + "/workSheets/";
+    }
+
+    @GetMapping("/delete/{workSheetId}")
+    public String deleteWorkSheet(@PathVariable Long aggregateId,
+                                  @PathVariable Long workSheetId) {
+        Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
+        WorkSheet workSheet = aggregate.getWorkSheets().stream()
+                .filter(x -> x.getId().equals(workSheetId)).toList().get(0);
+
+        aggregate.getWorkSheets().remove(workSheet);
+        workSheetRepository.delete(workSheet);
+        aggregateRepository.save(aggregate);
+        return "redirect:/aggregates/" + aggregate.getId() + "/workSheets/";
     }
 
     @GetMapping("/{workSheetId}")
     public String getWorkSheetPage(@PathVariable Long aggregateId,
                                    @PathVariable Long workSheetId,
-                                   Model model){
+                                   Model model) {
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
         WorkSheet workSheet = aggregate.getWorkSheets().stream()
                 .filter(x -> x.getId().equals(workSheetId)).toList().get(0);
@@ -79,8 +95,8 @@ public class WorkSheetController {
 
     @GetMapping("/{workSheetId}/stub")
     public String getWorkSheetStubPage(@PathVariable Long aggregateId,
-                                   @PathVariable Long workSheetId,
-                                   Model model){
+                                       @PathVariable Long workSheetId,
+                                       Model model) {
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
         WorkSheet workSheet = aggregate.getWorkSheets().stream()
                 .filter(x -> x.getId().equals(workSheetId)).toList().get(0);
@@ -97,7 +113,7 @@ public class WorkSheetController {
                              @RequestParam String endDate,
                              @RequestParam String obtainedFuel,
                              @RequestParam String obtainedOil,
-                             @RequestParam String workText){
+                             @RequestParam String workText) {
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
         WorkSheet workSheet = aggregate.getWorkSheets().stream()
                 .filter(x -> x.getId().equals(workSheetId)).toList().get(0);
@@ -109,14 +125,33 @@ public class WorkSheetController {
 
         WorkSheetStub workSheetStub = new WorkSheetStub(LocalDateTime.parse(startDate), LocalDateTime.parse(endDate),
                 workText, obtainedFuelParsed, obtainedOilParsed, fuelRate, oilRate);
+        workSheetStubRepository.save(workSheetStub);
 
         workSheet.obtainFuel(obtainedFuelParsed);
         workSheet.obtainOil(obtainedOilParsed);
         workSheet.useFuel(workSheetStub.getUsedFuel());
         workSheet.useOil(workSheetStub.getUsedOil());
+        workSheet.doWork(workSheetStub.getWorkHours());
+
 
         workSheet.getWorkSheetStubs().add(workSheetStub);
         workSheetRepository.save(workSheet);
-        return  "workSheetStubPage";
+        return "redirect:/aggregates/" + aggregate.getId() + "/workSheets/" + workSheet.getId() + "/stub";
+    }
+
+    @PostMapping("/{workSheetId}/stub/delete")
+    public String deleteStub(@PathVariable Long aggregateId,
+                             @PathVariable Long workSheetId){
+        Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
+        WorkSheet workSheet = aggregate.getWorkSheets().stream()
+                .filter(x -> x.getId().equals(workSheetId)).toList().get(0);
+
+        List<WorkSheetStub> workSheetStubs = workSheet.getWorkSheetStubs();
+        int lastWorkSheetStub = workSheetStubs.size();
+        WorkSheetStub removed = workSheetStubs.remove(lastWorkSheetStub - 1);
+        workSheetRepository.save(workSheet);
+        workSheetStubRepository.delete(removed);
+
+        return "redirect:/aggregates/" + aggregate.getId() + "/workSheets/" + workSheet.getId() + "/stub";
     }
 }

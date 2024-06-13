@@ -18,9 +18,12 @@ public class AggregateController {
     private final AggregateRepository aggregateRepository;
     private final UnitRepository unitRepository;
     private final ChassisTypeRepository chassisTypeRepository;
+    private final ChassisRepository chassisRepository;
     private final GeneratorTypeRepository generatorTypeRepository;
+    private final GeneratorRepository generatorRepository;
     private final ElectricCurrentTypeRepository electricCurrentTypeRepository;
     private final EngineTypeRepository engineTypeRepository;
+    private final EngineRepository engineRepository;
 
     private List<Unit> units;
     private List<ChassisType> chassisTypes;
@@ -28,11 +31,13 @@ public class AggregateController {
     private List<ElectricCurrentType> electricCurrentTypes;
     private List<EngineType> engineTypes;
 
-    public AggregateController(AggregateRepository aggregateRepository, UnitRepository unitRepository, ChassisTypeRepository chassisTypeRepository, GeneratorTypeRepository generatorTypeRepository, ElectricCurrentTypeRepository electricCurrentTypeRepository, EngineTypeRepository engineTypeRepository) {
+    public AggregateController(AggregateRepository aggregateRepository, UnitRepository unitRepository, ChassisTypeRepository chassisTypeRepository, ChassisRepository chassisRepository, GeneratorTypeRepository generatorTypeRepository, GeneratorRepository generatorRepository, ElectricCurrentTypeRepository electricCurrentTypeRepository, EngineTypeRepository engineTypeRepository, EngineRepository engineRepository) {
         this.aggregateRepository = aggregateRepository;
         this.unitRepository = unitRepository;
         this.chassisTypeRepository = chassisTypeRepository;
+        this.chassisRepository = chassisRepository;
         this.generatorTypeRepository = generatorTypeRepository;
+        this.generatorRepository = generatorRepository;
         this.electricCurrentTypeRepository = electricCurrentTypeRepository;
         this.engineTypeRepository = engineTypeRepository;
 
@@ -41,10 +46,12 @@ public class AggregateController {
         generatorTypes = generatorTypeRepository.findAll();
         electricCurrentTypes = electricCurrentTypeRepository.findAll();
         engineTypes = engineTypeRepository.findAll();
+        this.engineRepository = engineRepository;
     }
 
     @GetMapping("create")
     public String createPage(Model model) {
+        model.addAttribute("actionPath", "/aggregates/create");
         model.addAttribute("isCreating", true);
         model.addAttribute("aggregateName", "");
         model.addAttribute("aggregateManufacturerNumber", "");
@@ -84,31 +91,41 @@ public class AggregateController {
                          @RequestParam String engineNumber,
                          @RequestParam String fromBeginningWork){
 
-        Unit unit = unitRepository.findById(Long.getLong(unitId)).get();
+        Unit unit = unitRepository.findById(Long.parseLong(unitId)).get();
 
-        ChassisType chassisType = chassisTypeRepository.findById(Long.getLong(chassisTypeId)).get();
+        ChassisType chassisType = chassisTypeRepository.findById(Long.parseLong(chassisTypeId)).get();
         Chassis chassis = new Chassis(chassisType, chassisNumber);
+        chassisTypeRepository.save(chassisType);
+        chassisRepository.save(chassis);
 
-        GeneratorType generatorType = generatorTypeRepository.findById(Long.getLong(generatorTypeId)).get();
+        GeneratorType generatorType = generatorTypeRepository.findById(Long.parseLong(generatorTypeId)).get();
+        generatorTypeRepository.save(generatorType);
         ElectricCurrentType electricCurrentType =
-                electricCurrentTypeRepository.findById(Long.getLong(electricCurrentId)).get();
+                electricCurrentTypeRepository.findById(Long.parseLong(electricCurrentId)).get();
+        electricCurrentTypeRepository.save(electricCurrentType);
         Generator generator =
                 new Generator(generatorType, generatorNumber, Double.parseDouble(power), electricCurrentType);
+        generatorRepository.save(generator);
 
-        EngineType engineType = engineTypeRepository.findById(Long.getLong(engineTypeId)).get();
+        EngineType engineType = engineTypeRepository.findById(Long.parseLong(engineTypeId)).get();
         Engine engine = new Engine(engineType, engineNumber, Double.parseDouble(fromBeginningWork));
+        engineTypeRepository.save(engineType);
+        engineRepository.save(engine);
 
         Aggregate aggregate = new Aggregate(name, unit, manufactureNumber, CategoryType.valueOf(category),
                 LocalDateTime.parse(manufactureDate), LocalDateTime.parse(commissioningDate), chassis, generator,
                 engine, new ArrayList<>());
         Aggregate savedAggregate = aggregateRepository.save(aggregate);
-        return "redirect: /aggregates/edit/" + savedAggregate.getId();
+        return "redirect:/aggregates/edit/" + savedAggregate.getId();
     }
 
     @GetMapping("edit/{id}")
     public String editPage(@PathVariable Long id, Model model) {
         Aggregate aggregate = aggregateRepository.findById(id).get();
 
+        model.addAttribute("aggregate", aggregate);
+        model.addAttribute("actionPath", "/aggregates/edit/" + id);
+        model.addAttribute("isCreating", false);
         model.addAttribute("aggregateName", aggregate.getName());
         model.addAttribute("aggregateManufacturerNumber", aggregate.getManufacturerNumber());
         model.addAttribute("aggregateManufacturingDate", aggregate.getManufacturingDate());
@@ -176,31 +193,38 @@ public class AggregateController {
                          @RequestParam String engineNumber,
                          @RequestParam String fromBeginningWork){
 
-        Unit unit = unitRepository.findById(Long.getLong(unitId)).get();
+        Unit unit = unitRepository.findById(Long.parseLong(unitId)).get();
 
-        ChassisType chassisType = chassisTypeRepository.findById(Long.getLong(chassisTypeId)).get();
+        ChassisType chassisType = chassisTypeRepository.findById(Long.parseLong(chassisTypeId)).get();
         Chassis chassis = new Chassis(chassisType, chassisNumber);
+        chassisTypeRepository.save(chassisType);
+        chassisRepository.save(chassis);
 
-        GeneratorType generatorType = generatorTypeRepository.findById(Long.getLong(generatorTypeId)).get();
+        GeneratorType generatorType = generatorTypeRepository.findById(Long.parseLong(generatorTypeId)).get();
+        generatorTypeRepository.save(generatorType);
         ElectricCurrentType electricCurrentType =
-                electricCurrentTypeRepository.findById(Long.getLong(electricCurrentId)).get();
+                electricCurrentTypeRepository.findById(Long.parseLong(electricCurrentId)).get();
+        electricCurrentTypeRepository.save(electricCurrentType);
         Generator generator =
                 new Generator(generatorType, generatorNumber, Double.parseDouble(power), electricCurrentType);
+        generatorRepository.save(generator);
 
-        EngineType engineType = engineTypeRepository.findById(Long.getLong(engineTypeId)).get();
+        EngineType engineType = engineTypeRepository.findById(Long.parseLong(engineTypeId)).get();
         Engine engine = new Engine(engineType, engineNumber, Double.parseDouble(fromBeginningWork));
+        engineTypeRepository.save(engineType);
+        engineRepository.save(engine);
 
         Aggregate aggregate = new Aggregate(id, name, unit, manufactureNumber, CategoryType.valueOf(category),
                 LocalDateTime.parse(manufactureDate), LocalDateTime.parse(commissioningDate), chassis, generator,
                 engine, new ArrayList<>());
         Aggregate updatedAggregate = aggregateRepository.save(aggregate);
-        return "redirect: /aggregates/edit/" + updatedAggregate.getId();
+        return "redirect:/aggregates/edit/" + updatedAggregate.getId();
     }
 
     @GetMapping("/delete/{id}")
     public String deleteAggregate(@PathVariable Long id){
         Aggregate aggregate = aggregateRepository.findById(id).get();
         aggregateRepository.delete(aggregate);
-        return "redirect: index";
+        return "redirect:/";
     }
 }
