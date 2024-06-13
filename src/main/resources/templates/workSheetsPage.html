@@ -114,9 +114,9 @@
                     <td th:text="${aggregate.getEngine().getFromBeginningWork()}"></td>
                     <td th:text="${workSheet.getFromBeginningMonthWork()}"></td>
                     <td th:text="${aggregate.getEngine().getEngineType().getFuelRate()}"></td>
-                    <td th:text="${workSheet.getUsedFuel()}"></td>
+                    <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
                     <td th:text="${aggregate.getEngine().getEngineType().getOilRate()}+'%'"></td>
-                    <td th:text="${workSheet.getUsedOil()}"></td>
+                    <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedOil())}"></td>
                 </tr>
                 </tbody>
             </table>

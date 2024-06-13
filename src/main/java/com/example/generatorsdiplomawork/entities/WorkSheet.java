@@ -25,17 +25,21 @@ public class WorkSheet {
     private Double startOilBalance;
     private Double obtainedFuelSum;
     private Double obtainedOilSum;
+    private Double factFuelBalance;
+    private Double factOilBalance;
     private Double usedFuel;
     private Double usedOil;
     @OneToMany(fetch = FetchType.EAGER)
     private List<WorkSheetStub> workSheetStubs;
 
     public WorkSheet(Double startFuelBalance,
-                     Double startOilBalance,  Stack<WorkSheetStub> workSheetStubs) {
+                     Double startOilBalance, Stack<WorkSheetStub> workSheetStubs) {
         this.creatingDate = LocalDateTime.now();
         this.fromBeginningMonthWork = 0.0;
         this.startFuelBalance = startFuelBalance;
         this.startOilBalance = startOilBalance;
+        this.factFuelBalance = startFuelBalance;
+        this.factOilBalance = startOilBalance;
         this.obtainedFuelSum = 0.0;
         this.obtainedOilSum = 0.0;
         this.usedFuel = 0.0;
@@ -43,32 +47,27 @@ public class WorkSheet {
         this.workSheetStubs = workSheetStubs;
     }
 
-    public Double getEndFuelBalance() {
-        return obtainedFuelSum - usedFuel;
-    }
-
-    public Double getEndOilBalance() {
-        return obtainedOilSum - usedOil;
-    }
-
-    public void obtainFuel(Double fuelCount){
+    public void obtainFuel(Double fuelCount) {
         obtainedFuelSum += fuelCount;
+        factFuelBalance += fuelCount;
     }
 
-    public void useFuel(Double fuelCount){
-        obtainedFuelSum -= fuelCount;
+    public void useFuel(Double fuelCount) {
+        factFuelBalance -= fuelCount;
         usedFuel += fuelCount;
     }
-    public void obtainOil(Double oilCount){
+
+    public void obtainOil(Double oilCount) {
         obtainedOilSum += oilCount;
+        factOilBalance += oilCount;
     }
 
-    public void useOil(Double oilCount){
-        obtainedOilSum -= oilCount;
+    public void useOil(Double oilCount) {
+        factOilBalance -= oilCount;
         usedOil += oilCount;
     }
 
-    public void doWork(Double hoursOfWork){
+    public void doWork(Double hoursOfWork) {
         fromBeginningMonthWork += hoursOfWork;
     }
 }

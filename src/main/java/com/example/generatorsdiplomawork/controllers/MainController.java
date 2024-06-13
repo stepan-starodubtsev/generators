@@ -2,6 +2,7 @@ package com.example.generatorsdiplomawork.controllers;
 
 import com.example.generatorsdiplomawork.entities.Aggregate;
 import com.example.generatorsdiplomawork.repositories.AggregateRepository;
+import com.example.generatorsdiplomawork.utils.DoubleUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class MainController {
         List<Aggregate> aggregates = aggregateRepository.findAll();
 
         model.addAttribute("aggregates", aggregates);
+        model.addAttribute("doubleUtils", new DoubleUtils());
         return "index";
     }
 

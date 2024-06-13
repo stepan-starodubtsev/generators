@@ -7,6 +7,7 @@ import com.example.generatorsdiplomawork.entities.WorkSheetStub;
 import com.example.generatorsdiplomawork.repositories.AggregateRepository;
 import com.example.generatorsdiplomawork.repositories.WorkSheetRepository;
 import com.example.generatorsdiplomawork.repositories.WorkSheetStubRepository;
+import com.example.generatorsdiplomawork.utils.DoubleUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class WorkSheetController {
 
         model.addAttribute("aggregate", aggregate);
         model.addAttribute("workSheets", aggregate.getWorkSheets());
+        model.addAttribute("doubleUtils", new DoubleUtils());
         return "workSheetsPage";
     }
 
@@ -90,6 +92,7 @@ public class WorkSheetController {
         model.addAttribute("workSheet", workSheet);
         model.addAttribute("normalRateFuel", workSheet.getUsedFuel());
         model.addAttribute("normalRateOil", workSheet.getUsedOil());
+        model.addAttribute("doubleUtils", new DoubleUtils());
         return "workSheetPage";
     }
 
@@ -103,6 +106,7 @@ public class WorkSheetController {
 
         model.addAttribute("aggregate", aggregate);
         model.addAttribute("workSheet", workSheet);
+        model.addAttribute("doubleUtils", new DoubleUtils());
         return "workSheetStubPage";
     }
 
@@ -147,10 +151,17 @@ public class WorkSheetController {
                 .filter(x -> x.getId().equals(workSheetId)).toList().get(0);
 
         List<WorkSheetStub> workSheetStubs = workSheet.getWorkSheetStubs();
-        int lastWorkSheetStub = workSheetStubs.size();
-        WorkSheetStub removed = workSheetStubs.remove(lastWorkSheetStub - 1);
+        WorkSheetStub lastWorkSheetStub = workSheetStubs.get(workSheetStubs.size() - 1);
+        workSheet.setFactFuelBalance(workSheet.getFactFuelBalance() + lastWorkSheetStub.getUsedFuel());
+        workSheet.setFactOilBalance(workSheet.getFactOilBalance() + lastWorkSheetStub.getUsedOil());
+        workSheet.setObtainedFuelSum(workSheet.getObtainedFuelSum() - lastWorkSheetStub.getObtainedFuel());
+        workSheet.setObtainedOilSum(workSheet.getObtainedOilSum() - lastWorkSheetStub.getObtainedOil());
+        workSheet.setUsedFuel(workSheet.getUsedFuel() - lastWorkSheetStub.getUsedFuel());
+        workSheet.setObtainedOilSum(workSheet.getUsedOil() - lastWorkSheetStub.getUsedOil());
+
+        workSheetStubs.remove(lastWorkSheetStub);
         workSheetRepository.save(workSheet);
-        workSheetStubRepository.delete(removed);
+        workSheetStubRepository.delete(lastWorkSheetStub);
 
         return "redirect:/aggregates/" + aggregate.getId() + "/workSheets/" + workSheet.getId() + "/stub";
     }

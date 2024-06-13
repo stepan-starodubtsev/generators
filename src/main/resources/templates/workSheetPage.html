@@ -27,6 +27,9 @@
                 <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
             <li>
+                <a th:href="'/aggregates/'+${aggregate.id}+'/workSheets/'" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>
+            </li>
+            <li>
                 <a th:href="'/aggregates/'+${aggregate.getId()}+'/workSheets/'+${workSheet.getId()}+'/stub'"
                    class="nav-link px-0 align-middle">Заповнити корінець робочого листа</a>
             </li>
@@ -87,21 +90,21 @@
                         <td th:text="${aggregate.getEngine().getEngineType().getFuelType().getName()}"></td>
                         <td></td>
                         <td>1</td>
-                        <td th:text="${workSheet.getStartFuelBalance()}"></td>
-                        <td th:text="${workSheet.getObtainedFuelSum()}"></td>
-                        <td th:text="${workSheet.getEndFuelBalance()}"></td>
-                        <td th:text="${workSheet.getUsedFuel()}"></td>
-                        <td th:text="${normalRateFuel}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getStartFuelBalance())}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getObtainedFuelSum())}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getFactFuelBalance())}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
                     </tr>
                     <tr>
                         <td>Мастило</td>
                         <td></td>
                         <td>1</td>
-                        <td th:text="${workSheet.getStartOilBalance()}"></td>
-                        <td th:text="${workSheet.getObtainedOilSum()}"></td>
-                        <td th:text="${workSheet.getEndOilBalance()}"></td>
-                        <td th:text="${workSheet.getUsedOil()}"></td>
-                        <td th:text="${normalRateOil}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getStartOilBalance())}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getObtainedOilSum())}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getFactOilBalance())}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedOil())}"></td>
+                        <td th:text="${doubleUtils.formatToTwoDecimals(normalRateOil)}"></td>
                     </tr>
                     </tbody>
                 </table>
