@@ -27,7 +27,7 @@
                 <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
             <li>
-                <a th:href="'/aggregates/'+${aggregate.id}+'/workSheets/'" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>
+                <a th:href="'/aggregates/'+${aggregate.getId()}+'/workSheets/'+${workSheet.getId()}" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>
             </li>
         </ul>
     </div>
@@ -64,10 +64,10 @@
                     <td th:text="${workSheetStub.getStartWorkDateTime()}"></td>
                     <td th:text="${workSheetStub.getEndWorkDateTime()}"></td>
                     <td th:text="${workSheetStub.getWorkDescription()}"></td>
-                    <td th:text="${workSheetStub.getObtainedFuel()}"></td>
-                    <td th:text="${workSheetStub.getObtainedOil()}"></td>
-                    <td th:text="${workSheetStub.getUsedFuel().}"></td>
-                    <td th:text="${workSheetStub.getUsedOil()}"></td>
+                    <td th:text="${doubleUtils.formatToTwoDecimals(workSheetStub.getObtainedFuel())}"></td>
+                    <td th:text="${doubleUtils.formatToTwoDecimals(workSheetStub.getObtainedOil())}"></td>
+                    <td th:text="${doubleUtils.formatToTwoDecimals(workSheetStub.getUsedFuel())}"></td>
+                    <td th:text="${doubleUtils.formatToTwoDecimals(workSheetStub.getUsedOil())}"></td>
                 </tr>
                 </tbody>
             </table>

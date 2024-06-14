@@ -27,11 +27,11 @@ public class Aggregate {
     private CategoryType categoryType;
     private LocalDateTime manufacturingDate;
     private LocalDateTime commissioningDate;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private Chassis chassis;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private Generator generator;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private Engine engine;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<WorkSheet> workSheets;
