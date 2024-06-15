@@ -2,7 +2,7 @@ spring:
   application:
     name: GeneratorsDiplomaWork
   datasource:
-    url: jdbc:postgresql://localhost:5432/aggregate_db
+    url: jdbc:postgresql://192.168.230.71:5432/aggregate_db
     username: postgres
     password: root
   jpa:

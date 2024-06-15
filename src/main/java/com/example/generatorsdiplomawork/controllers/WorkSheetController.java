@@ -7,11 +7,12 @@ import com.example.generatorsdiplomawork.entities.WorkSheetStub;
 import com.example.generatorsdiplomawork.repositories.AggregateRepository;
 import com.example.generatorsdiplomawork.repositories.WorkSheetRepository;
 import com.example.generatorsdiplomawork.repositories.WorkSheetStubRepository;
-import com.example.generatorsdiplomawork.utils.DoubleUtils;
+import com.example.generatorsdiplomawork.utils.FormatUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Stack;
@@ -35,7 +36,7 @@ public class WorkSheetController {
 
         model.addAttribute("aggregate", aggregate);
         model.addAttribute("workSheets", aggregate.getWorkSheets());
-        model.addAttribute("doubleUtils", new DoubleUtils());
+        model.addAttribute("formatUtils", new FormatUtils());
         return "workSheetsPage";
     }
 
@@ -92,7 +93,8 @@ public class WorkSheetController {
         model.addAttribute("workSheet", workSheet);
         model.addAttribute("normalRateFuel", workSheet.getUsedFuel());
         model.addAttribute("normalRateOil", workSheet.getUsedOil());
-        model.addAttribute("doubleUtils", new DoubleUtils());
+        model.addAttribute("monthNow", Month.values()[LocalDate.now().getMonthValue() - 1].toString().toLowerCase());
+        model.addAttribute("formatUtils", new FormatUtils());
         return "workSheetPage";
     }
 
@@ -106,7 +108,7 @@ public class WorkSheetController {
 
         model.addAttribute("aggregate", aggregate);
         model.addAttribute("workSheet", workSheet);
-        model.addAttribute("doubleUtils", new DoubleUtils());
+        model.addAttribute("doubleUtils", new FormatUtils());
         return "workSheetStubPage";
     }
 

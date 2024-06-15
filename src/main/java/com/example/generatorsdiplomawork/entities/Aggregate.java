@@ -64,9 +64,25 @@ public class Aggregate {
     }
 
     public WorkSheet getLastWorkSheet() {
-        if (workSheets.isEmpty()){
+        if (workSheets.isEmpty()) {
             return new WorkSheet();
         }
         return workSheets.get(workSheets.size() - 1);
+    }
+
+    public String getFuelByFuelType(String fuelType, String fuelState) {
+        if (fuelType.equals(engine.getEngineType().getFuelType().getName())) {
+            switch (fuelState){
+                case "start":
+                    return getLastWorkSheet().getStartFuelBalance().toString();
+                case "fact":
+                    return getLastWorkSheet().getFactFuelBalance().toString();
+                case "obtain":
+                    return getLastWorkSheet().getObtainedFuelSum().toString();
+                case "used":
+                    return getLastWorkSheet().getUsedFuel().toString();
+            }
+        }
+        return "";
     }
 }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,33 +10,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg bg-body-secondary">
-    <div class="container-fluid px-5">
-        <a class="navbar-brand" href="#">Інформація по частині</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="d-flex justify-content-end">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Відомість про рух ПММ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Керування користувачами</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Особистий кабінет</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Вийти з акаунта</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
+<nav th:insert="blocks/navbar :: #navbar"></nav>
 
 <main class="d-flex flex-column mt-4 mx-5">
     <form action="" method="post">
@@ -53,7 +27,7 @@
             </span>
         </div>
     </form>
-    <p class="h1 text-center">Звітна відомість руху паливно-мастильних матеріалів за травень місяць</p>
+    <p th:text="'Звітна відомість руху паливно-мастильних матеріалів за '+ ${monthNow} + ' місяць'" class="h1 text-center"></p>
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead>
@@ -80,42 +54,31 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>ЕСД-10Т/400М</td>
-                <td>К22502</td>
-                <td>01.2023</td>
-                <td>1</td>
-                <td>5</td>
-                <td>0</td>
-                <td></td>
-                <td>0</td>
-                <td>50</td>
-                <td></td>
-                <td>0.20</td>
-                <td>32.5</td>
-                <td></td>
-                <td>0.01</td>
-                <td>17.5</td>
-                <td></td>
-                <td>0.19</td>
-                <td>04436</td>
+            <tr th:each="aggregate : ${aggregates}">
+                <td th:text="${aggregate.getId()}"></td>
+                <td th:text="${aggregate.getName()}"></td>
+                <td th:text="${aggregate.getManufacturerNumber()}"></td>
+                <td th:text="${formatUtils.formatDateTime(aggregate.getLastWorkSheet().getCreatingDate())}"></td>
+                <td th:text="${aggregate.getLastWorkSheet().getId()}"></td>
+                <td th:text="${formatUtils.formatToTwoDecimals(aggregate.getLastWorkSheet().getFromBeginningMonthWork())}"></td>
+                <td th:text="${aggregate.getFuelByFuelType('ДП', 'start')}"></td>
+                <td th:text="${aggregate.getFuelByFuelType('А-80', 'start')}"></td>
+                <td th:text="${formatUtils.formatToTwoDecimals(aggregate.getLastWorkSheet.getFactOilBalance())}"></td>
+                <td th:text="${aggregate.getFuelByFuelType('ДП', 'obtain')}"></td>
+                <td th:text="${aggregate.getFuelByFuelType('А-80', 'obtain')}"></td>
+                <td th:text="${formatUtils.formatToTwoDecimals(aggregate.getLastWorkSheet.getObtainedOilSum())}"></td>
+                <td th:text="${aggregate.getFuelByFuelType('ДП', 'used')}"></td>
+                <td th:text="${aggregate.getFuelByFuelType('А-80', 'used')}"></td>
+                <td th:text="${formatUtils.formatToTwoDecimals(aggregate.getLastWorkSheet.getUsedOil())}"></td>
+                <td th:text="${aggregate.getFuelByFuelType('ДП', 'fact')}"></td>
+                <td th:text="${aggregate.getFuelByFuelType('А-80', 'fact')}"></td>
+                <td th:text="${formatUtils.formatToTwoDecimals(aggregate.getLastWorkSheet.getFactOilBalance())}"></td>
+                <td th:text="${aggregate.getEngine().getFromBeginningWork()}"></td>
             </tr>
             <tr>
                 <td colspan="6">Загальний рух паливо-мастильних матеріалів</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>50</td>
-                <td>0</td>
-                <td>0.20</td>
-                <td>32.5</td>
-                <td>0</td>
-                <td>0.01</td>
-                <td>17.5</td>
-                <td>0</td>
-                <td>0.19</td>
-                <td>04436</td>
+                <td th:each="sumWorkSheetValue : ${sumWorkSheetValues}"
+                    th:text="${formatUtils.formatToTwoDecimals(sumWorkSheetValue)}">0</td>
             </tr>
             </tbody>
         </table>

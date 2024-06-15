@@ -24,7 +24,7 @@
                 <a th:href="'/aggregates/edit/'+${aggregate.getId()}" class="nav-link align-middle px-0">Детальніше про агрегат </a>
             </li>
             <li>
-                <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
+                <a th:if="${!aggregate.getWorkSheets().isEmpty()}" th:href="'/aggregates/calendar/'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
             <li>
                 <a th:href="'/aggregates/'+${aggregate.id}+'/workSheets/'" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>
@@ -38,7 +38,7 @@
     <div class="content-block">
         <div class="main-table">
             <p th:text="'Робочий лист агрегата №'+${workSheet.getId()}" class="text-center h2"></p>
-            <p th:text="'Дійсний з '+${workSheet.getCreatingDate()}+' до '+${workSheet.getCreatingDate().plusMonths(1)}"
+            <p th:text="'Дійсний з '+${formatUtils.formatDateTime(workSheet.getCreatingDate())}+' до '+${formatUtils.formatDateTime(workSheet.getCreatingDate().plusMonths(1))}"
                class="text-center h3"></p>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
@@ -57,7 +57,7 @@
                     <tbody>
                     <tr>
                         <td th:text="${workSheet.getId()}"></td>
-                        <td th:text="${workSheet.getCreatingDate()}"></td>
+                        <td th:text="${formatUtils.formatDateTime(workSheet.getCreatingDate())}"></td>
                         <td>технічне забезпечення</td>
                         <td th:text="${aggregate.getName()}"></td>
                         <td th:text="${aggregate.getManufacturerNumber()}"></td>
@@ -70,7 +70,7 @@
             </div>
         </div>
         <div class="summary-table mt-5">
-            <p class="text-center h3">Підсумкові дані за лютий місяць 2023 року</p>
+            <p th:text="'Підсумкові дані за '+ ${monthNow} +' місяць 2023 року'" class="text-center h3"></p>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -90,21 +90,21 @@
                         <td th:text="${aggregate.getEngine().getEngineType().getFuelType().getName()}"></td>
                         <td></td>
                         <td>1</td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getStartFuelBalance())}"></td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getObtainedFuelSum())}"></td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getFactFuelBalance())}"></td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getStartFuelBalance())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getObtainedFuelSum())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getFactFuelBalance())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
                     </tr>
                     <tr>
                         <td>Мастило</td>
                         <td></td>
                         <td>1</td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getStartOilBalance())}"></td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getObtainedOilSum())}"></td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getFactOilBalance())}"></td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedOil())}"></td>
-                        <td th:text="${doubleUtils.formatToTwoDecimals(normalRateOil)}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getStartOilBalance())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getObtainedOilSum())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getFactOilBalance())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getUsedOil())}"></td>
+                        <td th:text="${formatUtils.formatToTwoDecimals(normalRateOil)}"></td>
                     </tr>
                     </tbody>
                 </table>

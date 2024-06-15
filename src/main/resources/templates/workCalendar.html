@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +12,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-secondary">
     <div class="container-fluid px-5">
-        <a class="navbar-brand" href="#">Агрегат дизельний ЕСД-10/400М</a>
+        <a th:text="${aggregate.getName()}" class="navbar-brand" href="#"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -75,46 +75,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Січень</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Лютий</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Березень</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Квітень</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Травень</td>
-                    <td></td>
-                    <td></td>
+                <tr th:each="month : ${months}">
+                    <td th:text="${month.name().substring(0,1) + month.name().substring(1).toLowerCase()}"></td>
+                    <td th:if="${aggregate.getLastWorkSheet().getCreatingDate().getMonthValue() == month.ordinal()}"
+                        th:text="${aggregate.getLastWorkSheet().getFromBeginningMonthWork()}"></td>
+                    <td th:if="${aggregate.getLastWorkSheet().getCreatingDate().getMonthValue() == month.ordinal()}"
+                        th:text="${aggregate.getEngine().getFromBeginningWork()}"></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -159,5 +125,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
+</div>
 </body>
 </html>

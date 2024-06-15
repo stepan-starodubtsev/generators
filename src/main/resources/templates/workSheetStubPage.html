@@ -24,7 +24,7 @@
                 <a th:href="'/aggregates/edit/'+${aggregate.getId()}" class="nav-link align-middle px-0">Детальніше про агрегат </a>
             </li>
             <li>
-                <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
+                <a th:if="${!aggregate.getWorkSheets().isEmpty()}" th:href="'/aggregates/calendar/'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
             <li>
                 <a th:href="'/aggregates/'+${aggregate.getId()}+'/workSheets/'+${workSheet.getId()}" class="nav-link px-0 align-middle">Повернутися до робочого листа</a>

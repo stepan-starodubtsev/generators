@@ -24,7 +24,7 @@
                 <a th:href="'/aggregates/edit/'+${aggregate.getId()}" class="nav-link align-middle px-0">Детальніше про агрегат </a>
             </li>
             <li>
-                <a th:href="'/aggregates/calendar'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
+                <a th:if="${!aggregate.getWorkSheets().isEmpty()}" th:href="'/aggregates/calendar/'+${aggregate.getId()}" class="nav-link px-0 align-middle">Календар напрацювань</a>
             </li>
         </ul>
     </div>
@@ -99,8 +99,8 @@
                     <td th:text="${aggregate.getName()}"></td>
                     <td th:text="${aggregate.getManufacturerNumber()}"></td>
                     <td th:text="${aggregate.getCategoryType().name()}"></td>
-                    <td th:text="${aggregate.getManufacturingDate()}"></td>
-                    <td th:text="${aggregate.getCommissioningDate()}"></td>
+                    <td th:text="${formatUtils.formatDateTime(aggregate.getManufacturingDate())}"></td>
+                    <td th:text="${formatUtils.formatDateTime(aggregate.getCommissioningDate())}"></td>
                     <td th:text="${aggregate.calculateCommissioningAge()}"></td>
                     <td th:text="${aggregate.getChassis().getType().getName()}"></td>
                     <td th:text="${aggregate.getChassis().getNumber()}"></td>
@@ -114,9 +114,9 @@
                     <td th:text="${aggregate.getEngine().getFromBeginningWork()}"></td>
                     <td th:text="${workSheet.getFromBeginningMonthWork()}"></td>
                     <td th:text="${aggregate.getEngine().getEngineType().getFuelRate()}"></td>
-                    <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
+                    <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getUsedFuel())}"></td>
                     <td th:text="${aggregate.getEngine().getEngineType().getOilRate()}+'%'"></td>
-                    <td th:text="${doubleUtils.formatToTwoDecimals(workSheet.getUsedOil())}"></td>
+                    <td th:text="${formatUtils.formatToTwoDecimals(workSheet.getUsedOil())}"></td>
                 </tr>
                 </tbody>
             </table>

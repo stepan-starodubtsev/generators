@@ -227,4 +227,20 @@ public class AggregateController {
         aggregateRepository.delete(aggregate);
         return "redirect:/";
     }
+
+    @GetMapping("calendar/{aggregateId}")
+    public String calendar(@PathVariable Long aggregateId, Model model){
+        Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
+        model.addAttribute("aggregate", aggregate);
+        model.addAttribute("months", Month.values());
+        int year = LocalDateTime.now().getYear();
+        List<Integer> years = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            years.add(year++);
+        }
+        model.addAttribute("years", years);
+
+        return "workCalendar";
+    }
+
 }
