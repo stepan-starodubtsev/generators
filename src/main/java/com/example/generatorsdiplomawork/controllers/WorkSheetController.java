@@ -1,13 +1,12 @@
 package com.example.generatorsdiplomawork.controllers;
 
-import com.example.generatorsdiplomawork.entities.Aggregate;
-import com.example.generatorsdiplomawork.entities.Month;
-import com.example.generatorsdiplomawork.entities.WorkSheet;
-import com.example.generatorsdiplomawork.entities.WorkSheetStub;
+import com.example.generatorsdiplomawork.config.UserDetailsImpl;
+import com.example.generatorsdiplomawork.entities.*;
 import com.example.generatorsdiplomawork.repositories.AggregateRepository;
 import com.example.generatorsdiplomawork.repositories.WorkSheetRepository;
 import com.example.generatorsdiplomawork.repositories.WorkSheetStubRepository;
 import com.example.generatorsdiplomawork.utils.FormatUtils;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,13 @@ public class WorkSheetController {
     }
 
     @GetMapping("/")
-    public String workSheetsPage(@PathVariable Long aggregateId, Model model) {
+    public String workSheetsPage(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                 @PathVariable Long aggregateId, Model model) {
+        if (userDetails.getUser().getRole().equals(UserRoles.ADMIN)){
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
 
         model.addAttribute("aggregate", aggregate);
@@ -99,9 +104,15 @@ public class WorkSheetController {
     }
 
     @GetMapping("/{workSheetId}/stub")
-    public String getWorkSheetStubPage(@PathVariable Long aggregateId,
+    public String getWorkSheetStubPage(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                       @PathVariable Long aggregateId,
                                        @PathVariable Long workSheetId,
                                        Model model) {
+        if (userDetails.getUser().getRole().equals(UserRoles.ADMIN)){
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
         WorkSheet workSheet = aggregate.getWorkSheets().stream()
                 .filter(x -> x.getId().equals(workSheetId)).toList().get(0);

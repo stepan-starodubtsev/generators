@@ -156,7 +156,7 @@
             </div>
             <div class="card-footer border-top border-light mt-2">
                 <div class="d-flex justify-content-end mt-2">
-                    <button class="btn btn-primary me-4" type="submit">Зберегти</button>
+                    <button th:if="${isAdmin}" class="btn btn-primary me-4" type="submit">Зберегти</button>
                 </div>
             </div>
         </form>

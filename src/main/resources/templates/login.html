@@ -18,19 +18,21 @@
                 <div class="card shadow-2-strong" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
 
-                        <h3 class="mb-5">Вхід в акаунт</h3>
+                        <form action="/process_login" method="post">
+                            <h3 class="mb-5">Вхід в акаунт</h3>
 
-                        <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="email" id="typeEmailX-2" class="form-control form-control-lg" />
-                            <label class="form-label" for="typeEmailX-2">Логін</label>
-                        </div>
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="text" id="typeEmailX-2" class="form-control form-control-lg" name="username" />
+                                <label class="form-label" for="typeEmailX-2">Логін</label>
+                            </div>
 
-                        <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="password" id="typePasswordX-2" class="form-control form-control-lg" />
-                            <label class="form-label" for="typePasswordX-2">Пароль</label>
-                        </div>
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="password" id="typePasswordX-2" class="form-control form-control-lg" name="password"/>
+                                <label class="form-label" for="typePasswordX-2">Пароль</label>
+                            </div>
 
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Увійти</button>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Увійти</button>
+                        </form>
 
                     </div>
                 </div>

@@ -1,8 +1,10 @@
 package com.example.generatorsdiplomawork.controllers;
 
+import com.example.generatorsdiplomawork.config.UserDetailsImpl;
 import com.example.generatorsdiplomawork.entities.*;
 import com.example.generatorsdiplomawork.repositories.*;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +52,12 @@ public class AggregateController {
     }
 
     @GetMapping("create")
-    public String createPage(Model model) {
+    public String createPage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        if (userDetails.getUser().getRole().equals(UserRoles.ADMIN)){
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
         model.addAttribute("actionPath", "/aggregates/create");
         model.addAttribute("isCreating", true);
         model.addAttribute("aggregateName", "");
@@ -120,7 +127,13 @@ public class AggregateController {
     }
 
     @GetMapping("edit/{id}")
-    public String editPage(@PathVariable Long id, Model model) {
+    public String editPage(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                           @PathVariable Long id, Model model) {
+        if (userDetails.getUser().getRole().equals(UserRoles.ADMIN)){
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
         Aggregate aggregate = aggregateRepository.findById(id).get();
 
         model.addAttribute("aggregate", aggregate);
@@ -229,7 +242,13 @@ public class AggregateController {
     }
 
     @GetMapping("calendar/{aggregateId}")
-    public String calendar(@PathVariable Long aggregateId, Model model){
+    public String calendar(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                           @PathVariable Long aggregateId, Model model){
+        if (userDetails.getUser().getRole().equals(UserRoles.ADMIN)){
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
         Aggregate aggregate = aggregateRepository.findById(aggregateId).get();
         model.addAttribute("aggregate", aggregate);
         model.addAttribute("months", Month.values());

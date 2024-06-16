@@ -1,10 +1,13 @@
 package com.example.generatorsdiplomawork.controllers;
 
+import com.example.generatorsdiplomawork.config.UserDetailsImpl;
 import com.example.generatorsdiplomawork.entities.Aggregate;
 import com.example.generatorsdiplomawork.entities.FuelType;
 import com.example.generatorsdiplomawork.entities.Month;
+import com.example.generatorsdiplomawork.entities.UserRoles;
 import com.example.generatorsdiplomawork.repositories.AggregateRepository;
 import com.example.generatorsdiplomawork.utils.FormatUtils;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +29,16 @@ public class MainController {
     }
 
     @GetMapping
-    public String index(Model model) {
+    public String index(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
         List<Aggregate> aggregates = aggregateRepository.findAll();
+
+        if (userDetails.getUser().getRole().equals(UserRoles.USER)) {
+            model.addAttribute("isAdmin", false);
+            aggregates = aggregates.stream().filter(aggregate -> aggregate.getUnit().getName()
+                    .equals(userDetails.getUser().getUnit().getName())).toList();
+        } else {
+            model.addAttribute("isAdmin", true);
+        }
 
         model.addAttribute("aggregates", aggregates);
         model.addAttribute("formatUtils", new FormatUtils());
@@ -44,9 +55,12 @@ public class MainController {
     }
 
     @GetMapping("/fuelReport")
-    public String getFuelReport(Model model) {
+    public String getFuelReport(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
         List<Aggregate> aggregates = aggregateRepository.findAll().stream()
                 .filter(aggregate -> !aggregate.getWorkSheets().isEmpty()).toList();
+        if (userDetails.getUser().getRole().equals(UserRoles.USER)) {
+           aggregates = aggregates.stream().filter(aggregate -> aggregate.getUnit().equals(userDetails.getUser().getUnit())).toList();
+        }
 
         model.addAttribute("aggregates", aggregates);
         model.addAttribute("monthNow", Month.values()[LocalDate.now().getMonthValue()]);

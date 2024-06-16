@@ -14,7 +14,7 @@
 
 <main class="d-flex flex-column mt-4 mx-5">
     <div class="d-flex justify-content-between">
-        <form action="/aggregates/create" method="get" class="p-0 m-0">
+        <form th:if="${isAdmin}" action="/aggregates/create" method="get" class="p-0 m-0">
             <button type="submit" class="btn btn-primary">
                 Додати агрегат
             </button>
@@ -40,8 +40,8 @@
             <thead>
             <tr>
                 <th scope="col">Робочий лист</th>
-                <th scope="col">Редагувати</th>
-                <th scope="col">Видалити</th>
+                <th th:if="${isAdmin}" scope="col">Редагувати</th>
+                <th th:if="${isAdmin}" scope="col">Видалити</th>
                 <th scope="col">№</th>
                 <th scope="col">Підрозділ</th>
                 <th scope="col">Назва засобу</th>
@@ -70,8 +70,8 @@
             <tbody>
             <tr th:each="aggregate : ${aggregates}">
                 <td><a th:href="'/aggregates/'+${aggregate.id}+'/workSheets/'">Робочий лист</a></td>
-                <td><a th:href="'/aggregates/edit/'+${aggregate.id}">Редагувати</a></td>
-                <td>
+                <td th:if="${isAdmin}"><a th:href="'/aggregates/edit/'+${aggregate.id}">Редагувати</a></td>
+                <td th:if="${isAdmin}">
                     <a th:href="'/aggregates/delete/'+${aggregate.id}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                              fill="currentColor"

@@ -15,4 +15,8 @@ public class Unit {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+
+    public Unit(String name) {
+        this.name = name;
+    }
 }

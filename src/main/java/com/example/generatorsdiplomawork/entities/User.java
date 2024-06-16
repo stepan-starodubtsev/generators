@@ -20,4 +20,11 @@ public class User {
     private Unit unit;
     @Enumerated(EnumType.STRING)
     private UserRoles role;
+
+    public User(String login, String password, Unit unit, UserRoles role) {
+        this.login = login;
+        this.password = password;
+        this.unit = unit;
+        this.role = role;
+    }
 }

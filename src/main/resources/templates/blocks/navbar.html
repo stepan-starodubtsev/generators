@@ -13,10 +13,10 @@
                         <a class="nav-link active" aria-current="page" href="/fuelReport">Відомість про рух ПММ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/users">Керування користувачами</a>
+                        <a th:if="${isAdmin}" class="nav-link active" aria-current="page" href="/users">Керування користувачами</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/user">Особистий кабінет</a>
+                        <a class="nav-link active" aria-current="page" href="/users/user">Особистий кабінет</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/logout">Вийти з акаунта</a>

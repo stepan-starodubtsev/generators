@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,70 +10,48 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg bg-body-secondary">
-    <div class="container-fluid px-5">
-        <a class="navbar-brand" href="#">Агрегат дизельний ЕСД-10/400М</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="d-flex justify-content-end">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Відомість про рух ПММ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Керування користувачами</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Особистий кабінет</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Вийти з акаунта</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
+<nav th:insert="blocks/navbar :: #navbar"></nav>
+
 
 <main class="mx-5 mt-3">
     <div class="content-block">
-        <h1 class="text-center">Основна інформація про агрерат</h1>
+        <h1 class="text-center">Особистий кабінет</h1>
         <form th:action="${actionPath}" method="post"
               class="row g-2 needs-validation mt-1" enctype="multipart/form-data">
             <div class="col-md-9 col-sm-12 card-body px-4">
                 <div class="row">
                     <div class="col-md-6 my-1">
                         <label for="name" class="form-label">Логін</label>
-                        <input type="text" class="form-control" id="name"
-                               name="userName" required>
+                        <input th:value="${user.getLogin()}" type="text" class="form-control" id="name"
+                               name="login" required>
                         <div class="invalid-feedback">
                             Заповніть поле
                         </div>
                     </div>
                     <div class="col-md-6 my-1">
-                        <label for="manufactor-number" class="form-label">Пароль</label>
-                        <input type="text" class="form-control" id="manufactor-number"
-                               name="userPhone" required>
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="text" class="form-control"
+                               id="password"
+                               name="password" required>
                         <div class="invalid-feedback">
                             Заповніть поле
                         </div>
                     </div>
                     <div class="col-md-6 my-2">
-                        <label for="manufactor-numbe" class="form-label">Підрозділ</label>
-                        <input type="text" class="form-control" id="manufactor-numbe"
-                               name="userPhone" required>
+                        <label for="unit" class="form-label">Підрозділ</label>
+                        <select class="form-select" id="unit" name="unit" required>
+                            <option th:each="unit : ${units}" th:value="${unit.getId()}"
+                                    th:text="${unit.getName()}"></option>
+                        </select>
                         <div class="invalid-feedback">
                             Заповніть поле
                         </div>
                     </div>
-                    <div class="col-md-6 my-1">
-                        <label for="fuel-type-name" class="col-form-label">Роль</label>
-                        <select class="form-select" id="fuel-type-name" aria-label="Default select example">
-                            <option selected value="USER">USER</option>
-                            <option value="ADMIN">ADMIN</option>
+                    <div th:if="${isAdmin}" class="col-md-6 my-1">
+                        <label for="role" class="col-form-label">Роль</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option th:each="role : ${roles}" th:value="${role.name()}"
+                                    th:text="${role.name()}"></option>
                         </select>
                     </div>
                 </div>

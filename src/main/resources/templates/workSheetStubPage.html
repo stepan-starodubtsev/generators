@@ -35,13 +35,13 @@
         <h1 class="text-center">Корінець робочого листа</h1>
         <div class="d-flex justify-content-between mb-2">
             <form method="get" class="p-0 m-0">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button th:if="${!isAdmin}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Додати помітку
                 </button>
             </form>
             <form th:action="'/aggregates/'+ ${aggregate.id}+'/workSheets/'+${workSheet.getId()}+'/stub/delete'"
                   method="post" class="p-0 m-0">
-                <button type="submit" class="btn btn-primary">
+                <button th:if="${!isAdmin}" type="submit" class="btn btn-primary">
                     Видалити помітку
                 </button>
             </form>
